@@ -67,7 +67,11 @@ function lhs_peco_commandline_input() {
 	local result_cached=${2:-'false'}
 	local input_expired_time="${3:-$lhs_cli_peco_input_expired_time}"
 
-	local md5_hash=$(echo $commandline | md5)
+	if [[ "$(uname)" == "Darwin" ]]; then
+  	local md5_hash=$(echo $commandline | md5)
+	elif [[ "$(uname)" == "Linux" ]]; then
+		local md5_hash=$(echo $commandline | md5sum)
+	fi
 	local input_folder="${lhs_cli_input:-/tmp/inputs}"
 	mkdir -p ${input_folder}
 	local input_file_path="${input_folder}/${md5_hash}.txt"

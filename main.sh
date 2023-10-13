@@ -76,13 +76,29 @@ export lhs_cli_log_uploaded_file_path="${lhs_cli_logs}/lhs-cli-uploaded.log"
 
 LHS_BIND_KEY=${2:-'True'}
 
-if [[ "${LHS_BIND_KEY}" = "True" ]]; then
+if [[ "${LHS_BIND_KEY}" = "True" && "$(uname)" == "Darwin" ]]; then
 	# Add hot-keys
+
 	zle -N lhs_peco_select_history
 	bindkey '^r' lhs_peco_select_history
 	# Option + r
 	bindkey '®' lhs_peco_select_history
 
+	zle -N lhs_help_all
+	bindkey '^h' lhs_help_all
+
+	# Hot key for git commit suggestions
+	zle -N lhs_git_commit_suggestions_with_hint
+	# Hotkey: Option + gc
+	bindkey '©ç' lhs_git_commit_suggestions_with_hint
+elif [[ "${LHS_BIND_KEY}" = "True" && "$(uname)" == "Linux" ]]; then 	
+	# Add hot-keys
+
+	# Ctrl + r on Linux
+	zle -N lhs_peco_select_history
+	bindkey '®' lhs_peco_select_history
+
+	# Ctrl + h on Linux
 	zle -N lhs_help_all
 	bindkey '^h' lhs_help_all
 
